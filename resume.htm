@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="refresh" content="0; url=/assets/docs/resume.pdf" />
+  <meta http-equiv="refresh" content="0; url=assets/docs/resume.pdf" />
   <meta name="robots" content="noindex">
   <title>Redirecting to resume</title>
   <script>
     // Fallback: try to force-download if browser stays on this page
     (function(){
       try{
-        const url = '/assets/docs/resume.pdf';
+        const url = 'assets/docs/resume.pdf';
         fetch(url, {cache: 'no-store'}).then(r => r.blob()).then(b => {
           const obj = URL.createObjectURL(b);
           const a = document.createElement('a');
@@ -22,6 +22,6 @@
 </head>
 <body>
   Redirecting to resume...
-  <p><a href="/assets/docs/resume.pdf">Download resume</a></p>
+  <p><a href="assets/docs/resume.pdf">Download resume</a></p>
 </body>
 </html>
