@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0a0e16" />
 <title>Rohan Alias — Azure Data Engineer</title>
 <meta name="description" content="Rohan Alias — Azure Data Engineer. 3.7+ years building cloud data pipelines on Azure Databricks, Delta Lake, and PySpark." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -220,9 +221,20 @@
   .btn.primary:hover{ background: #52c9ff; }
   .foot-note{ color: var(--text-dim); font-size: 12.5px; }
   .foot-note code{ color: var(--azure-dim); }
+  /* Accessibility: skip link */
+  .skip-link{
+    position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden;
+  }
+  .skip-link:focus{
+    left: 12px; top: 12px; width: auto; height: auto; padding: 8px 12px; background: var(--panel); color: var(--text-bright); border: 1px solid var(--azure); border-radius: 6px; z-index:50;
+  }
+  /* Small responsive tweaks */
+  @media (max-width:420px){ .avatar{ width:72px; height:72px; font-size:28px } .hero{ padding-top:38px } }
 </style>
 </head>
 <body>
+
+<a href="#main" class="skip-link">Skip to content</a>
 
 <div class="titlebar">
   <div class="wrap titlebar-inner">
@@ -233,7 +245,7 @@
   </div>
 </div>
 
-<div class="wrap">
+<main id="main" class="wrap" role="main">
 
   <!-- HERO -->
   <section class="hero" style="border-top:none; padding-top:56px;">
@@ -399,11 +411,16 @@
     <div class="cta-row">
       <a class="btn primary" href="mailto:rohanalias20@gmail.com">Get in touch</a>
       <a class="btn" href="https://www.linkedin.com/in/rohan-alias-4323541a1/" target="_blank" rel="noopener">View LinkedIn</a>
+      <button class="btn" id="copyEmail">Copy email</button>
+      <a class="btn" href="/assets/docs/resume.pdf" download aria-label="Download resume">Download Resume</a>
+      <a class="btn" href="/assets/docs/applause-award.pdf" download aria-label="Download award">Download Award</a>
     </div>
     <div class="foot-note">© 2026 Rohan Alias · built with <code>plain HTML + CSS + JS</code></div>
   </footer>
 
-</div>
+  <div aria-live="polite" id="toast" style="position:fixed;right:16px;bottom:20px;display:none;background:var(--panel);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:8px;box-shadow:0 6px 24px rgba(2,6,23,0.6);"></div>
+
+</main>
 
 <script>
   // ---------- Typewriter hero line ----------
@@ -507,6 +524,23 @@
         const partial = input.value.toLowerCase();
         const match = Object.keys(commands).find(c => c.startsWith(partial));
         if (match) input.value = match;
+      }
+    });
+  })();
+
+  // Copy email button
+  (function(){
+    const btn = document.getElementById('copyEmail');
+    const toast = document.getElementById('toast');
+    if (!btn || !toast) return;
+    btn.addEventListener('click', async () => {
+      try{
+        await navigator.clipboard.writeText('rohanalias20@gmail.com');
+        toast.textContent = 'Email copied to clipboard';
+        toast.style.display = 'block';
+        setTimeout(()=>{ toast.style.display = 'none'; }, 2200);
+      }catch(e){
+        window.open('mailto:rohanalias20@gmail.com');
       }
     });
   })();
