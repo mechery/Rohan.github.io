@@ -546,6 +546,39 @@
       }
     });
   })();
+
+  // Force-download resume links for browsers that ignore the `download` attribute
+  (function(){
+    const filename = 'Rohan_Alias_resume.pdf';
+    const selectors = 'a.resume-link, a[href$="/assets/docs/resume.pdf"], a.btn[href$="/assets/docs/resume.pdf"]';
+    const links = document.querySelectorAll(selectors);
+    if (!links || links.length === 0) return;
+
+    async function forceDownload(url, fileName){
+      try{
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) { window.location = url; return; }
+        const blob = await res.blob();
+        const obj = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = obj;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(obj);
+      }catch(err){
+        window.location = url;
+      }
+    }
+
+    links.forEach(a => {
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        forceDownload(a.href, filename);
+      });
+    });
+  })();
 </script>
 
 </body>
