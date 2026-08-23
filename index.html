@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rohan Alias — Azure Data Engineer</title>
+<meta name="description" content="Rohan Alias — Azure Data Engineer. 3.7+ years building cloud data pipelines on Azure Databricks, Delta Lake, and PySpark." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0e16;
+    --panel: #0f1420;
+    --panel-2: #131a29;
+    --border: #1e293b;
+    --text: #cbd5e1;
+    --text-dim: #64748b;
+    --text-bright: #f1f5f9;
+    --azure: #38bdf8;
+    --azure-dim: #0ea5c9;
+    --amber: #f5a623;
+    --green: #4ade80;
+    --magenta: #e879f9;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(56,189,248,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 90% 10%, rgba(232,121,249,0.05), transparent 60%);
+    color: var(--text);
+    font-family: var(--mono);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
+  }
+
+  ::selection{ background: rgba(56,189,248,0.3); color: var(--text-bright); }
+
+  a{ color: var(--azure); text-decoration: none; border-bottom: 1px solid transparent; }
+  a:hover{ border-bottom-color: var(--azure); }
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline: 2px solid var(--azure); outline-offset: 3px; border-radius: 2px;
+  }
+
+  .wrap{ max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Title bar ---------- */
+  .titlebar{
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(10,14,22,0.85);
+    backdrop-filter: blur(8px);
+  }
+  .titlebar-inner{ display:flex; align-items:center; gap:10px; font-size: 13px; color: var(--text-dim); }
+  .dots{ display:flex; gap:6px; }
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot.r{ background:#ef4444; } .dot.y{ background:#f5a623; } .dot.g{ background:#4ade80; }
+  .path{ margin-left: 6px; }
+  .path .user{ color: var(--green); }
+  .path .at{ color: var(--text-dim); }
+  .path .host{ color: var(--azure); }
+  .path .colon{ color: var(--text-dim); }
+  .path .cwd{ color: var(--amber); }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding: 56px 0 40px; }
+  .avatar-row{ display:flex; align-items:center; gap: 22px; margin-bottom: 28px; flex-wrap: wrap; }
+  .avatar{
+    width: 88px; height: 88px; border-radius: 10px;
+    background: linear-gradient(155deg, var(--azure), #1e3a5f 70%);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 34px; font-weight: 800; color: #04121c;
+    border: 1px solid rgba(56,189,248,0.4);
+    box-shadow: 0 0 0 1px rgba(56,189,248,0.08), 0 10px 30px -10px rgba(56,189,248,0.35);
+    flex-shrink: 0;
+  }
+  .prompt-line{ color: var(--text-dim); font-size: 14px; }
+  .prompt-line .sym{ color: var(--green); }
+
+  h1{
+    font-size: clamp(30px, 6vw, 46px);
+    margin: 10px 0 6px;
+    color: var(--text-bright);
+    letter-spacing: -0.5px;
+    font-weight: 800;
+  }
+  h1 .caret{
+    display:inline-block; width: 0.5ch; background: var(--azure);
+    animation: blink 1s steps(1) infinite; margin-left: 4px; height: 0.85em; vertical-align: -0.1em;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  .role-line{ color: var(--azure-dim); font-size: 16px; margin-bottom: 18px; }
+  .role-line .tag{
+    display:inline-block; border:1px solid rgba(56,189,248,0.35); background: rgba(56,189,248,0.06);
+    color: var(--azure); border-radius: 4px; padding: 2px 8px; font-size: 12px; margin-right: 8px;
+  }
+
+  .tagline{
+    font-size: 16.5px; color: var(--text); max-width: 680px; margin: 0 0 26px;
+  }
+
+  .contact-row{ display:flex; flex-wrap: wrap; gap: 10px 18px; font-size: 14px; color: var(--text-dim); margin-bottom: 8px; }
+  .contact-row a{ color: var(--text); }
+  .contact-row a:hover{ color: var(--azure); }
+  .contact-row .sep{ color: var(--border); }
+
+  /* ---------- Stats ---------- */
+  .stats{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    margin: 30px 0 10px;
+  }
+  .stat{ background: var(--panel); padding: 18px 14px; text-align:center; }
+  .stat .num{ font-size: 26px; font-weight: 800; color: var(--text-bright); }
+  .stat .num .unit{ font-size: 16px; color: var(--azure); }
+  .stat .label{ font-size: 11.5px; color: var(--text-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  @media (max-width: 560px){ .stats{ grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---------- Section framing ---------- */
+  section{ padding: 38px 0; border-top: 1px solid var(--border); }
+  .cmd{
+    display:flex; align-items:center; gap: 8px; margin-bottom: 20px; font-size: 14px; color: var(--text-dim);
+  }
+  .cmd .sym{ color: var(--green); }
+  .cmd .arg{ color: var(--amber); }
+  .cmd .comment{ color: var(--text-dim); opacity: 0.7; margin-left: 4px; }
+
+  /* ---------- Experience ---------- */
+  .job{
+    border-left: 2px solid var(--border);
+    padding: 2px 0 26px 22px;
+    position: relative;
+  }
+  .job:last-child{ padding-bottom: 4px; }
+  .job::before{
+    content:''; position:absolute; left: -6px; top: 4px; width: 10px; height: 10px;
+    border-radius: 50%; background: var(--bg); border: 2px solid var(--azure);
+  }
+  .job-head{ display:flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; margin-bottom: 8px; }
+  .job-role{ color: var(--text-bright); font-weight: 700; font-size: 16px; }
+  .job-org{ color: var(--azure-dim); font-size: 14px; }
+  .job-date{ color: var(--text-dim); font-size: 13px; white-space: nowrap; }
+  .job ul{ margin: 8px 0 0; padding-left: 18px; }
+  .job li{ margin-bottom: 7px; font-size: 14.5px; color: var(--text); }
+  .job li::marker{ color: var(--azure-dim); }
+  .job li b{ color: var(--text-bright); }
+
+  /* ---------- Skills ---------- */
+  .skill-groups{ display:flex; flex-direction:column; gap: 16px; }
+  .skill-group-label{ font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+  .skill-chips{ display:flex; flex-wrap: wrap; gap: 8px; }
+  .chip{
+    font-size: 13px; padding: 6px 11px; border-radius: 5px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    cursor: default; transition: all 0.15s ease;
+  }
+  .chip:hover{ border-color: var(--azure); color: var(--azure); background: rgba(56,189,248,0.06); transform: translateY(-1px); }
+
+  /* ---------- Project ---------- */
+  .card{
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px;
+  }
+  .card-head{ display:flex; justify-content: space-between; align-items:baseline; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 8px;}
+  .card-title{ color: var(--text-bright); font-weight: 700; font-size: 15.5px; }
+  .card-stack{ font-size: 12px; color: var(--azure-dim); }
+  .card ul{ margin: 10px 0 0; padding-left: 18px; }
+  .card li{ font-size: 14px; color: var(--text); margin-bottom: 6px; }
+  .card li::marker{ color: var(--magenta); }
+
+  /* ---------- Certs / education ---------- */
+  .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px){ .grid2{ grid-template-columns: 1fr; } }
+  .panel-box{ background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
+  .panel-box h3{ margin:0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-dim); font-weight: 600; }
+  .cert-item{ display:flex; align-items:center; gap:8px; font-size: 14px; color: var(--text); margin-bottom: 8px; }
+  .cert-item:last-child{ margin-bottom:0; }
+  .cert-item .ok{ color: var(--green); }
+  .edu-degree{ color: var(--text-bright); font-weight: 700; font-size: 14.5px; }
+  .edu-school{ color: var(--text); font-size: 13.5px; margin-top: 2px; }
+  .edu-meta{ color: var(--text-dim); font-size: 12.5px; margin-top: 6px; }
+
+  /* ---------- Console ---------- */
+  .console{
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px;
+    font-size: 13.5px; max-height: 260px; overflow-y: auto;
+  }
+  .console-line{ margin-bottom: 6px; white-space: pre-wrap; word-break: break-word; }
+  .console-line.echo{ color: var(--text-dim); }
+  .console-line .p{ color: var(--green); }
+  .console-line .out{ color: var(--text); }
+  .console-input-row{ display:flex; align-items:center; gap: 8px; margin-top: 6px; }
+  .console-input-row .p{ color: var(--green); flex-shrink:0; }
+  .console-input-row input{
+    flex:1; background: transparent; border: none; color: var(--text-bright);
+    font-family: var(--mono); font-size: 13.5px; outline: none;
+  }
+  .console-hint{ color: var(--text-dim); font-size: 12px; margin-top: 10px; }
+
+  /* ---------- Footer ---------- */
+  footer{ padding: 40px 0 60px; text-align:center; }
+  .cta-row{ display:flex; justify-content:center; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
+  .btn{
+    font-family: var(--mono); font-size: 13.5px; padding: 10px 18px; border-radius: 6px;
+    border: 1px solid var(--border); color: var(--text-bright); background: var(--panel);
+    cursor:pointer; transition: all 0.15s ease;
+  }
+  .btn.primary{ background: var(--azure); color: #04121c; border-color: var(--azure); font-weight: 700; }
+  .btn:hover{ transform: translateY(-1px); border-color: var(--azure); }
+  .btn.primary:hover{ background: #52c9ff; }
+  .foot-note{ color: var(--text-dim); font-size: 12.5px; }
+  .foot-note code{ color: var(--azure-dim); }
+</style>
+</head>
+<body>
+
+<div class="titlebar">
+  <div class="wrap titlebar-inner">
+    <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+    <span class="path">
+      <span class="user">rohan</span><span class="at">@</span><span class="host">azure-de</span><span class="colon">:</span><span class="cwd">~</span><span class="colon">$</span>
+    </span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none; padding-top:56px;">
+    <div class="avatar-row">
+      <div class="avatar">RA</div>
+      <div>
+        <div class="prompt-line"><span class="sym">$</span> whoami</div>
+        <h1>Rohan Alias<span class="caret"></span></h1>
+      </div>
+    </div>
+
+    <div class="role-line">
+      <span class="tag">AZURE</span><span class="tag">DATABRICKS</span><span class="tag">PYSPARK</span>
+      Azure Data Engineer · 3.7+ years
+    </div>
+
+    <p class="tagline" id="typewriter"></p>
+
+    <div class="contact-row">
+      <a href="https://www.linkedin.com/in/rohan-alias-4323541a1/" target="_blank" rel="noopener">linkedin.com/in/rohan-alias</a>
+      <span class="sep">·</span>
+      <a href="mailto:rohanalias20@gmail.com">rohanalias20@gmail.com</a>
+      <span class="sep">·</span>
+      <span>+91 97447 43587</span>
+      <span class="sep">·</span>
+      <span>Bengaluru, India</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="num" data-count="3.7" data-suffix="+"><span class="unit"></span>0</div><div class="label">Years Experience</div></div>
+      <div class="stat"><div class="num" data-count="30" data-suffix="%">0</div><div class="label">Faster Pipelines</div></div>
+      <div class="stat"><div class="num" data-count="100" data-suffix="%">0</div><div class="label">Data Validation Compliance</div></div>
+      <div class="stat"><div class="num" data-count="2" data-suffix="">0</div><div class="label">Cloud Certifications</div></div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="cmd"><span class="sym">$</span> cat experience.log</div>
+
+    <div class="job">
+      <div class="job-head">
+        <div><span class="job-role">Consultant, Data Engineering</span> — <span class="job-org">Deloitte</span></div>
+        <div class="job-date">Jan 2023 – Present · Bangalore</div>
+      </div>
+      <ul>
+        <li>Designed end-to-end ETL pipelines using <b>Medallion Architecture</b> (Bronze, Silver, Gold layers) on ADLS Gen2, ingesting and processing millions of operational records daily to support scalable analytics.</li>
+        <li>Engineered batch and near real-time streaming data pipelines with <b>Azure Databricks, PySpark, and Kafka</b>, enabling low-latency analytics and delivering actionable insights to stakeholders.</li>
+        <li>Built a comprehensive data cleansing, validation, and reconciliation framework that ensured high data quality and standardization across pipeline layers, supported by robust logging, monitoring, and alerting.</li>
+        <li>Leveraged <b>Delta Lake</b> for reliable, high-performance storage; applied advanced optimizations including partitioning, bucketing, salting, vacuuming, and file compaction, reducing processing times by <b>30%</b> and lowering compute costs.</li>
+        <li>Implemented <b>Unity Catalog</b> to enforce standardized access patterns, row- and column-level security, and governance, achieving 100% compliance in data validation and reconciliation while improving discoverability of analytics assets across teams.</li>
+        <li>Developed and maintained <b>CI/CD pipelines</b> to automate the deployment of data infrastructure and pipelines across environments, increasing release reliability and significantly reducing manual effort and deployment risks.</li>
+        <li>Designed and developed interactive <b>Power BI</b> dashboards that transformed raw data into actionable business insights, streamlining stakeholder reporting and decision-making.</li>
+        <li>Developed a Python-based security library using <b>FastAPI</b> to standardize authentication and authorization mechanisms, ensuring consistent security practices across multiple applications.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="cmd"><span class="sym">$</span> ls <span class="arg">skills/</span></div>
+    <div class="skill-groups">
+      <div>
+        <div class="skill-group-label">Cloud &amp; Big Data</div>
+        <div class="skill-chips">
+          <span class="chip">Azure Databricks</span><span class="chip">PySpark</span><span class="chip">Spark SQL</span>
+          <span class="chip">Delta Lake</span><span class="chip">Delta Live Tables</span><span class="chip">Unity Catalog</span>
+          <span class="chip">Azure Data Factory</span><span class="chip">ADLS Gen2</span><span class="chip">Azure SQL DB</span>
+          <span class="chip">Kafka</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-label">AWS</div>
+        <div class="skill-chips">
+          <span class="chip">S3</span><span class="chip">Lambda</span><span class="chip">Athena</span><span class="chip">Glue</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-label">Databases &amp; BI</div>
+        <div class="skill-chips">
+          <span class="chip">MySQL</span><span class="chip">Cosmos DB</span><span class="chip">Power BI</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-label">Orchestration &amp; DevOps</div>
+        <div class="skill-chips">
+          <span class="chip">Airflow</span><span class="chip">Control-M</span><span class="chip">Docker</span>
+          <span class="chip">Jenkins</span><span class="chip">Maven</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-label">GenAI &amp; Advanced Analytics</div>
+        <div class="skill-chips">
+          <span class="chip">RAG</span><span class="chip">Vector Embeddings</span><span class="chip">Azure OpenAI</span>
+          <span class="chip">Semantic Search</span><span class="chip">LLM Integration</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT -->
+  <section id="projects">
+    <div class="cmd"><span class="sym">$</span> git log <span class="arg">--projects</span></div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">HybridRAG-HR — Semantic + BM25 Candidate Screening</div>
+        <div class="card-stack">Python · FastAPI · pgvector · BGE-M3 · BM25 · Streamlit</div>
+      </div>
+      <ul>
+        <li>Redesigned an HR candidate screening system around hybrid dense+sparse retrieval with cross-encoder reranking, improving precision on multi-attribute queries.</li>
+        <li>Implemented LLM-based query decomposition to translate natural-language HR prompts into structured metadata filters plus a residual semantic query.</li>
+        <li>Replaced a dual-database (graph + vector) architecture with a single pgvector-backed store, cutting operational complexity.</li>
+        <li>Built an evaluation harness (precision@k / recall@k) to make embedding and reranker tuning measurable.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CERTS + EDUCATION -->
+  <section id="certs">
+    <div class="cmd"><span class="sym">$</span> cat <span class="arg">certs.txt education.txt</span></div>
+    <div class="grid2">
+      <div class="panel-box">
+        <h3>Certifications</h3>
+        <div class="cert-item"><span class="ok">✔</span>
+          <a href="https://credentials.databricks.com/a061c0e1-d56b-4293-a52a-9320588956bb#acc.1qbBKLac" target="_blank" rel="noopener">Databricks Certified Data Engineer Associate</a>
+        </div>
+        <div class="cert-item"><span class="ok">✔</span>
+          <a href="https://www.credly.com/badges/40a69a62-43d7-4915-8f1a-437889f66b69/linked_in_profile" target="_blank" rel="noopener">AWS Certified Cloud Practitioner</a>
+        </div>
+      </div>
+      <div class="panel-box">
+        <h3>Education</h3>
+        <div class="edu-degree">B.Tech, Electrical &amp; Electronics Engineering</div>
+        <div class="edu-school">Government Engineering College Thrissur</div>
+        <div class="edu-meta">2018 – 2022 · CGPA 8.08</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements">
+    <div class="cmd"><span class="sym">$</span> cat <span class="arg">achievements.txt</span></div>
+    <div class="panel-box">
+      <h3>Recognition</h3>
+      <div class="cert-item"><span class="ok">🏆</span> Deloitte Applause Award (2x) — recognized for positive client feedback and consistent delivery excellence on client-facing engagements</div>
+    </div>
+  </section>
+
+  <!-- CONSOLE -->
+  <section id="console-section">
+    <div class="cmd"><span class="sym">$</span> ./console.sh <span class="comment"># try: help · about · skills · achievements · contact</span></div>
+    <div class="console" id="consoleOutput">
+      <div class="console-line out">Welcome. Type <span class="p">help</span> to see available commands.</div>
+    </div>
+    <div class="console-input-row">
+      <span class="p">rohan@azure-de:~$</span>
+      <input type="text" id="consoleInput" autocomplete="off" spellcheck="false" aria-label="Portfolio terminal input" />
+    </div>
+    <div class="console-hint">↑ / ↓ = history · Tab = autocomplete</div>
+  </section>
+
+  <footer>
+    <div class="cta-row">
+      <a class="btn primary" href="mailto:rohanalias20@gmail.com">Get in touch</a>
+      <a class="btn" href="https://www.linkedin.com/in/rohan-alias-4323541a1/" target="_blank" rel="noopener">View LinkedIn</a>
+    </div>
+    <div class="foot-note">© 2026 Rohan Alias · built with <code>plain HTML + CSS + JS</code></div>
+  </footer>
+
+</div>
+
+<script>
+  // ---------- Typewriter hero line ----------
+  (function(){
+    const el = document.getElementById('typewriter');
+    const full = "Building cloud data pipelines on Azure — Medallion architecture, Delta Lake, and PySpark processing millions of records a day. I like turning messy operational data into things people can actually decide with.";
+    let i = 0;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { el.textContent = full; return; }
+    function tick(){
+      el.textContent = full.slice(0, i);
+      i++;
+      if (i <= full.length) requestAnimationFrame(() => setTimeout(tick, 8));
+    }
+    tick();
+  })();
+
+  // ---------- Animated stat counters ----------
+  (function(){
+    const stats = document.querySelectorAll('.stat .num');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        io.unobserve(el);
+        const target = parseFloat(el.dataset.count);
+        const suffix = el.dataset.suffix || '';
+        if (reduce) { el.textContent = target + suffix; return; }
+        let start = null;
+        const dur = 900;
+        function step(ts){
+          if (!start) start = ts;
+          const p = Math.min((ts - start) / dur, 1);
+          const val = target * p;
+          el.textContent = (target % 1 === 0 ? Math.floor(val) : val.toFixed(1)) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.4 });
+    stats.forEach(s => io.observe(s));
+  })();
+
+  // ---------- Interactive console ----------
+  (function(){
+    const output = document.getElementById('consoleOutput');
+    const input = document.getElementById('consoleInput');
+    const history = [];
+    let hIndex = -1;
+
+    const commands = {
+      help: "Available commands: about, experience, skills, projects, certs, achievements, contact, resume, clear",
+      about: "Rohan Alias — Azure Data Engineer, 3.7+ yrs at Deloitte. Cloud data pipelines, Delta Lake, Databricks, PySpark.",
+      experience: "Consultant, Data Engineering @ Deloitte (Jan 2023–present). Medallion Architecture, Databricks, Delta Lake. See experience.log above ↑",
+      skills: "Azure Databricks · PySpark · Delta Lake · Unity Catalog · ADF · AWS · Power BI · Airflow · Docker",
+      projects: "HybridRAG-HR — hybrid semantic+BM25 candidate screening with cross-encoder reranking.",
+      certs: "Databricks Certified Data Engineer Associate · AWS Certified Cloud Practitioner",
+      achievements: "Deloitte Applause Award (2x) — for positive client feedback and consistent delivery excellence.",
+      contact: "rohanalias20@gmail.com · +91 97447 43587 · linkedin.com/in/rohan-alias-4323541a1",
+      resume: "Resume available on request — reach out via email or LinkedIn.",
+    };
+
+    function print(text, cls){
+      const line = document.createElement('div');
+      line.className = 'console-line ' + (cls || 'out');
+      line.textContent = text;
+      output.appendChild(line);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function run(cmdRaw){
+      const cmd = cmdRaw.trim().toLowerCase();
+      const echo = document.createElement('div');
+      echo.className = 'console-line echo';
+      echo.innerHTML = '<span class="p">rohan@azure-de:~$</span> ' + cmdRaw;
+      output.appendChild(echo);
+
+      if (cmd === '') return;
+      if (cmd === 'clear'){ output.innerHTML = ''; return; }
+      if (commands[cmd]) { print(commands[cmd]); return; }
+      print(`command not found: ${cmd} — type 'help' for a list of commands`);
+    }
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter'){
+        const val = input.value;
+        run(val);
+        if (val.trim() !== '') { history.push(val); }
+        hIndex = history.length;
+        input.value = '';
+      } else if (e.key === 'ArrowUp'){
+        if (hIndex > 0){ hIndex--; input.value = history[hIndex]; }
+        e.preventDefault();
+      } else if (e.key === 'ArrowDown'){
+        if (hIndex < history.length - 1){ hIndex++; input.value = history[hIndex]; }
+        else { hIndex = history.length; input.value = ''; }
+        e.preventDefault();
+      } else if (e.key === 'Tab'){
+        e.preventDefault();
+        const partial = input.value.toLowerCase();
+        const match = Object.keys(commands).find(c => c.startsWith(partial));
+        if (match) input.value = match;
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
